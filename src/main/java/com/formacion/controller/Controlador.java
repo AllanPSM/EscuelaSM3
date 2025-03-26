@@ -92,10 +92,9 @@ public class Controlador {
             return "login";  // Regresa a login.jsp
         }
 
-       
-
         log.info("Inicio de sesión exitoso.");
         return "redirect:/inicio";  // Redirige a la página principal
+        
     }
 
 
