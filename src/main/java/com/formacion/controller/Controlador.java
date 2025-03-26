@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.formacion.entities.User;
 import com.formacion.service.UserService;
@@ -71,7 +72,35 @@ public class Controlador {
 
         return "index"; // Redirigir a la vista "index"
     }
+    // Ruta para mostrar la página de login (login.jsp)
+    @GetMapping("/login")
+    public String mostrarLogin(Model model) {
+        model.addAttribute("texto", "Inicia sesión.");
+        return "login"; // Asegura que coincida con el nombre del archivo JSP
+    }
+
+    
+    @PostMapping("/iniciarSesion")
+    public String iniciarSesion( String email, String password, Model model) {
+        log.info("Intento de inicio de sesión con email: " + email);
+
+        User usuario = userService.findUserByEmail(email);
+
+        if (usuario == null) {
+            log.warning("Usuario no encontrado.");
+            model.addAttribute("error", "Usuario no encontrado.");
+            return "login";  // Regresa a login.jsp
+        }
+
+       
+
+        log.info("Inicio de sesión exitoso.");
+        return "redirect:/inicio";  // Redirige a la página principal
+    }
+
 
     }
+
+    
 
 

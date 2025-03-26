@@ -35,7 +35,12 @@
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Sign in</button>
         </div>
+	
     </form>
+	<br><br>
+			    <form action="/login" method="get">
+			        <button type="submit">Iniciar Sesión</button>
+			    </form>
     
     <!-- Mostrar el dato enviado y el mensaje (si está disponible en el modelo) -->
     <h2>Usuario enviado:</h2>
