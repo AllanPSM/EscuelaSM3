@@ -95,6 +95,7 @@ public class Controlador {
         log.info("Inicio de sesión exitoso.");
         return "redirect:/inicio";  // Redirige a la página principal
         
+        
     }
 
 
