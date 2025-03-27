@@ -108,6 +108,9 @@
             document.getElementById("formattedData").textContent = "⚠️ Error al cargar los datos.";
         }
     }
+	
+	
+	
 
     // Ejecutar automáticamente al cargar la páginaaaaa
     formatJSON();
