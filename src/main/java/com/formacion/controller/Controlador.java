@@ -5,17 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.formacion.entities.User;
 import com.formacion.service.UserService;
 
 import lombok.extern.java.Log;
-
-/**
- * Controller para manejar las vistas y los formularios
- * 
- */
 @Controller
 @Log
 public class Controlador {
@@ -24,83 +18,103 @@ public class Controlador {
     private UserService userService;
 
     /**
-     * Solicitud GET para la ruta raíz (localhost:8080/), que muestra la vista de inicio.
-     * @param model
-     * @return vista "index"
+     * Ruta para la página principal. Redirige automáticamente al login.
+     * @return vista "login"
      */
     @GetMapping("/")
-    public String inicio(Model model) {
-        log.info("Arranca la app");
-        model.addAttribute("texto", "Texto de ejemplo");
-        return "index";
+    public String redirigirALogin() {
+        return "redirect:/login";  // Redirige a la vista de login
     }
 
     /**
-     * Recibe el dato del formulario y lo reenvía de vuelta a la vista "index".
+     * Muestra el formulario de registro.
+     * @param model
+     * @return vista "index" (registro.jsp o lo que sea que estés usando)
+     */
+    @GetMapping("/index")
+    public String mostrarFormularioRegistro(Model model) {
+        model.addAttribute("texto", "Formulario de Usuario");
+        return "index";  // Asegúrate de que el archivo sea index.jsp o el que estés utilizando
+    }
+
+    /**
+     * Procesa el formulario y crea el usuario.
      * @param email
      * @param password
      * @param model
-     * @return vista "index"
+     * @return vista con el mensaje y el usuario creado
      */
     @PostMapping("/procesarFormulario")
-    public String procesarFormulario( String email, String password, Model model) {
-        log.info("Procesamos el formulario");
-        log.info("Usuario: " + email);
-        log.info("Contraseña: " + password);
+    public String procesarFormulario(String email, String password, Model model) {
+        log.info("Procesando el formulario");
 
-        String mensaje = null;
+        String mensaje;
         User usuario = new User();
         usuario.setEmail(email);
         usuario.setPassword(password);
-        System.out.println("Email recibido: " + email);  // Para verificar
-
-        // Usamos el servicio para buscar por email
+        
+        // Buscar si el usuario ya existe
         User existingUser = userService.findUserByEmail(email);
 
         if (existingUser == null) {
-            // Si no existe, lo guardamos
+            // Si no existe, crear el usuario
             userService.saveUser(usuario);
-            mensaje = "El usuario " + usuario.getEmail() + " ha sido creado.";
+            mensaje = "El usuario ha sido creado con éxito.";
         } else {
-            // Si ya existe, mostramos un mensaje
-            mensaje = "El usuario " + usuario.getEmail() + " ya está registrado.";
+            // Si ya existe, mostrar un mensaje
+            mensaje = "El usuario ya está registrado.";
         }
 
-        // Añadir los datos al modelo para mostrarlos en la vista
-        model.addAttribute("usuario", usuario);
         model.addAttribute("mensaje", mensaje);
+        model.addAttribute("user", usuario);
 
-        return "index"; // Redirigir a la vista "index"
+        return "index"; // Regresar a la misma vista con el mensaje
     }
-    // Ruta para mostrar la página de login (login.jsp)
+
+    /**
+     * Ruta para mostrar la página de login (login.jsp).
+     * @param model
+     * @return vista "login"
+     */
     @GetMapping("/login")
     public String mostrarLogin(Model model) {
         model.addAttribute("texto", "Inicia sesión.");
-        return "login"; // Asegura que coincida con el nombre del archivo JSP
+        return "login";  // Redirige a la vista de login
     }
 
-    
+    /**
+     * Procesa el formulario de login.
+     * @param email
+     * @param password
+     * @param model
+     * @return vista de inicio si las credenciales son correctas
+     */
     @PostMapping("/iniciarSesion")
-    public String iniciarSesion( String email, String password, Model model) {
-        log.info("Intento de inicio de sesión con email: " + email);
+    public String iniciarSesion(String email, String password, Model model) {
+        log.info("Iniciando sesión con el email: " + email);
 
-        User usuario = userService.findUserByEmail(email);
+        // Verificar si las credenciales son correctas
+        User user = userService.findUserByEmail(email);
 
-        if (usuario == null) {
-            log.warning("Usuario no encontrado.");
-            model.addAttribute("error", "Usuario no encontrado.");
-            return "login";  // Regresa a login.jsp
+        if (user != null && user.getPassword().equals(password)) {
+            // Si el usuario existe y la contraseña es correcta
+            model.addAttribute("texto", "Bienvenido " + user.getEmail());
+            return "inicio";  // Redirigir a la página de inicio
+        } else {
+            // Si el usuario no existe o la contraseña es incorrecta
+            model.addAttribute("mensaje", "Credenciales incorrectas. Intenta nuevamente.");
+            return "login";  // Regresar al formulario de login
         }
-
-        log.info("Inicio de sesión exitoso.");
-        return "redirect:/inicio";  // Redirige a la página principal
-        
-        
     }
 
-
+    /**
+     * Página de inicio después de iniciar sesión con éxito.
+     * @param model
+     * @return vista "inicio"
+     */
+    @GetMapping("/inicio")
+    public String mostrarInicio(Model model) {
+        model.addAttribute("texto", "Bienvenido al inicio");
+        return "inicio";  // Mostrar la vista de inicio después de iniciar sesión
     }
-
-    
-
-
+}
