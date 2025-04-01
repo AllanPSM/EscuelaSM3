@@ -62,7 +62,7 @@
         <h1>Iniciar Sesión</h1>
 
         <!-- Formulario de login -->
-		<form action="/iniciarSesion" method="post">
+		<form action="/login" method="post">
 		    <div class="mb-3">
 		        <label for="email" class="form-label">Email</label>
 		        <input type="email" class="form-control" id="email" name="email" required>

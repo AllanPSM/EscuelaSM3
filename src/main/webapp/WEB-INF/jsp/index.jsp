@@ -62,7 +62,7 @@
         <h1>Formulario de Usuario</h1>
 
         <!-- Formulario para capturar el email y la contraseña -->
-        <form class="row g-3" action="/procesarFormulario" method="post">
+        <form class="row g-3" action="/index" method="post">
             <div class="col-md-12">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" name="email" id="email" required>
