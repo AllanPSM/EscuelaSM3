@@ -19,5 +19,5 @@ public class User {
     private String email; // Email o nombre de usuario
     private String password; // Contraseña
     private Boolean isAdmin; // Si es admin (tiny int en la base de datos)
-
+    
 }

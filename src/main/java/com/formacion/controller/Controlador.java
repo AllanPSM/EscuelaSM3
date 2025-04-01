@@ -45,7 +45,12 @@ public class Controlador {
         model.addAttribute("texto", "Formulario de Usuario");
         return "index";  // Asegúrate de que el archivo sea index.jsp o el que estés utilizando
     }
+    
+    @GetMapping("/logout")
+    public String cerrarSesion() {
 
+        return "redirect:/"; // Redirige a la página de login (la de inicio)
+    }
     /**
      * Procesa el formulario y crea el usuario.
      * @param email
