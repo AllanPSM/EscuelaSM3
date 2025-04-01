@@ -120,7 +120,7 @@ public class Controlador {
             return "login";  // Regresar al formulario de login
         }
     }
-
+ 
     /**
      * Página de inicio después de iniciar sesión con éxito.
      * @param model
